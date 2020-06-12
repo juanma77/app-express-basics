@@ -2,8 +2,23 @@
 const express = require('express');
 const app = express();
 
-// Esto es para que express pueda entender el formato json
+// Módulo para utilizar middleware y no crearlo desde cero
+const morgan = require('morgan');
+
+// Método que sirve de middleware para ver que ruta solicitó el usuario
+const logger = ( req, res, next ) => {
+    console.log(`URL received: ${ req.protocol }:// ${ req.get('host') } ${ req.originalUrl }`);
+    next();
+}
+
+// Siempre que utilizamos "app.use" quiere decir que estamos utilizando un middleware; esto es para que express pueda entender el formato json
 app.use(express.json());
+
+// Para que se ejecute el método de middleware "logger" antes de que el usuario obtenga la ruta que ha solicitado
+app.use(logger);
+
+// Esto hace la misma función que el método logger pero usando el middleware de morgan
+app.use(morgan('dev'));
 
 // Esto se ejecutará para todas las rutas "/users"; debemos poner el "next()" para que continúe con la ejecución del código que sigue, es decir, para poder ir a las otras rutas 
 app.all('/users', ( req, res, next ) =>{
