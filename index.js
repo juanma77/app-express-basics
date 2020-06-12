@@ -27,9 +27,9 @@ app.all('/users', ( req, res, next ) =>{
 });
 
 // Ruta por defecto para que no nos muestre error
-app.get('/', ( req, res ) =>{
+/*app.get('/', ( req, res ) =>{
     res.send('This is a GET request');
-});
+});*/
 
 app.get('/users', ( req, res ) =>{
     res.json({
@@ -68,6 +68,9 @@ app.put('/contact/:id', ( req, res ) =>{
 app.delete('/delete/:id', ( req, res ) =>{
     res.send(`This is a DELETE request and the User with ID ${req.params.id} is now deleted!`);
 });
+
+// Para servir archivos estáticos desde la carpeta de nuesto proyecto llamada public; debemos de tener comenada la ruta por defecto (app.get( '/' )...)
+app.use(express.static('public'));
 
 // Indicamos el puerto en el cual estará escuchando nuestra aplicación 
 app.listen(3800, () =>{
