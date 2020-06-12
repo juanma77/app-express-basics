@@ -5,6 +5,17 @@ const app = express();
 // Módulo para utilizar middleware y no crearlo desde cero
 const morgan = require('morgan');
 
+// Esto es para congfigurar las settings 
+
+// Este es el nombre de nuestra aplicación
+app.set('appName', 'This is my first App on Express');
+
+// Indicamos el puerto para no tener que cambiarlo en varias partes cuando lo modifiquemos 
+app.set('port',3800);
+
+// Establecemos nuestro motor de plantillas
+app.set('view engine', 'ejs');
+
 // Método que sirve de middleware para ver que ruta solicitó el usuario
 const logger = ( req, res, next ) => {
     console.log(`URL received: ${ req.protocol }:// ${ req.get('host') } ${ req.originalUrl }`);
@@ -19,6 +30,15 @@ app.use(logger);
 
 // Esto hace la misma función que el método logger pero usando el middleware de morgan
 app.use(morgan('dev'));
+
+// Para renderizar nuestra vista ejs
+/*app.get('/information', ( req, res ) =>{
+    const data = [ { name: 'john'}, { name: 'joe' }, { name: 'cameron' } ];
+
+    // Le pasamos los datos a nuestra vista
+    res.render('index.ejs', { people: data } ); 
+    res.send('This is a GET request');
+});*/
 
 // Esto se ejecutará para todas las rutas "/users"; debemos poner el "next()" para que continúe con la ejecución del código que sigue, es decir, para poder ir a las otras rutas 
 app.all('/users', ( req, res, next ) =>{
@@ -73,7 +93,8 @@ app.delete('/delete/:id', ( req, res ) =>{
 app.use(express.static('public'));
 
 // Indicamos el puerto en el cual estará escuchando nuestra aplicación 
-app.listen(3800, () =>{
-    console.log('Server running at port 3800!');
+app.listen(app.get('port'), () =>{
+    console.log(app.get('appName'));
+    console.log('Server running at port', app.get('port'), ' ! ');
 });
 
